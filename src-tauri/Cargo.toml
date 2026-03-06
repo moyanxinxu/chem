@@ -1,0 +1,51 @@
+[package]
+edition = "2024"
+rust-version = "1.85.0"
+
+
+name = "app"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["moyanxinxu"]
+license = ""
+repository = ""
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.5.6", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+tauri = { version = "2.10.3", features = [] }
+tauri-plugin-log = "2"
+
+axum = { version = "0.8.4", features = ["macros"] }
+thiserror = "2.0.12"
+sea-orm = { version = "1.1.11", features = [
+    "with-chrono",
+    "debug-print",
+    "sqlx-mysql",
+    "sqlx-sqlite",
+    "with-rust_decimal",
+    "runtime-tokio",
+] }
+anyhow = "1.0.98"
+tower-http = { version = "0.6.4", features = [
+    "trace",
+    "timeout",
+    "limit",
+    "cors",
+    "normalize-path",
+    "auth",
+    "compression-full",
+] }
+dirs = "4.0"
+tauri-plugin-axum = { git = "https://github.com/mcitem/tauri-plugin-axum" }
+tokio = { version = "1.45.0", features = ["full"] }
+xid = "1.1.1"
