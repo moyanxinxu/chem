@@ -46,6 +46,7 @@ tower-http = { version = "0.6.4", features = [
     "compression-full",
 ] }
 dirs = "4.0"
-tauri-plugin-axum = { git = "https://github.com/mcitem/tauri-plugin-axum" }
 tokio = { version = "1.45.0", features = ["full"] }
 xid = "1.1.1"
+tauri-plugin-axum = "0.7.2"
+reqwest = { version = "0.12.4", features = ["json"] }

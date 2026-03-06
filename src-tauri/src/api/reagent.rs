@@ -1,39 +1,43 @@
 use axum::Router;
-use axum::extract::{ Json, Path, Query, State };
-use axum::routing::{ post, get, put, delete };
-use serde::{ Deserialize, Serialize };
+use axum::extract::{Json, Path, Query, State};
+use axum::routing::{delete, get, post, put};
 
-use sea_orm::{ ActiveValue, FromQueryResult };
+use serde::{Deserialize, Serialize};
+
 use sea_orm::entity::prelude::*;
+use sea_orm::{ActiveValue, FromQueryResult};
 
-use crate::common::page::{ Page, PaginationParams };
-use crate::common::state::AppState;
-use crate::common::result::ApiResult;
+use crate::common::page::{Page, PaginationParams};
 use crate::common::response::ApiResponse;
 use crate::common::result::ApiError;
+use crate::common::result::ApiResult;
+use crate::common::state::AppState;
 
-use crate::entity::reagents::{ self, ActiveModel as ReagentActivateModel, Model };
 use crate::entity::prelude::Reagents;
+use crate::entity::reagents::{self, ActiveModel as ReagentActivateModel, Model};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct AddReagentBody {
     chem_lab: String,
     chem_name: String,
-    chem_cas: Option<String>,
     reagent_num: i64,
-    batch_num: Option<i64>,
-    existing_stock: Option<String>,
+    chem_cas: Option<String>,
+    stock: i64,
     producer: Option<String>,
-    place: Option<String>,
+
     cabinet: Option<String>,
+    place: Option<String>,
+
+    mfg_date: Option<String>,
+    unit: String,
     msds_url: Option<String>,
     other: Option<String>,
 }
 
 async fn add_reagent(
     State(AppState { db }): State<AppState>,
-    Json(body): Json<AddReagentBody>
+    Json(body): Json<AddReagentBody>,
 ) -> ApiResult<ApiResponse<Model>> {
     let id = xid::new().to_string();
     let reagent = ReagentActivateModel {
@@ -42,12 +46,13 @@ async fn add_reagent(
         chem_name: ActiveValue::set(body.chem_name),
         chem_cas: ActiveValue::set(body.chem_cas),
         reagent_num: ActiveValue::set(body.reagent_num),
-        batch_num: ActiveValue::set(body.batch_num),
-        existing_stock: ActiveValue::set(body.existing_stock),
+        stock: ActiveValue::set(body.stock),
         producer: ActiveValue::set(body.producer),
         place: ActiveValue::set(body.place),
         cabinet: ActiveValue::set(body.cabinet),
+        mfg_date: ActiveValue::set(body.mfg_date),
         msds_url: ActiveValue::set(body.msds_url),
+        unit: ActiveValue::set(body.unit),
         other: ActiveValue::set(body.other),
         ..Default::default()
     };
@@ -81,18 +86,19 @@ struct GetReagentResponse {
     chem_name: String,
     chem_cas: Option<String>,
     reagent_num: i64,
-    batch_num: Option<i64>,
-    existing_stock: Option<String>,
+    stock: i64,
     producer: Option<String>,
     place: Option<String>,
     cabinet: Option<String>,
     msds_url: Option<String>,
+    mfg_date: Option<String>,
+    unit: String,
     other: Option<String>,
 }
 
 async fn get_reagent(
     State(AppState { db }): State<AppState>,
-    Query(GetReagentQuery { pagination }): Query<GetReagentQuery>
+    Query(GetReagentQuery { pagination }): Query<GetReagentQuery>,
 ) -> ApiResult<ApiResponse<Page<GetReagentResponse>>> {
     let paginator = Reagents::find()
         .filter(reagents::Column::Status.eq(1))
@@ -105,23 +111,35 @@ async fn get_reagent(
             let page = Page::from_pagination(pagination, total, reagents);
             Ok(ApiResponse::ok("获取试剂列表成功", Some(page)))
         }
-        Err(e) => { Err(ApiError::Biz(format!("获取试剂列表失败: {}", e))) }
+        Err(e) => Err(ApiError::Biz(format!("获取试剂列表失败: {}", e))),
     }
 }
 
 async fn delete_reagent(
     State(AppState { db }): State<AppState>,
-    Path(id): Path<String>
+    Path(id): Path<String>,
 ) -> ApiResult<ApiResponse<Model>> {
     let reagent = Reagents::find_by_id(id).one(&db).await.unwrap();
 
     if let Some(reagent) = reagent {
         reagent.delete(&db).await.unwrap();
-        Ok(ApiResponse::ok("删除试剂成功", None))
+        Ok(ApiResponse::ok("删除试剂信息成功", None))
     } else {
         Err(ApiError::Biz("试剂不存在".into()))
     }
 }
+
+// {
+//     "status": "1",
+//     "chemName": "",
+//     "chemCas": "108-90-7",
+//     "chemEnglishName": "",
+//     "isFuzzy": "1",
+//     "page": {
+//         "current": "1",
+//         "size": 10
+//     }
+// }
 
 pub fn create_reagent_router() -> Router<AppState> {
     Router::new()

@@ -17,7 +17,7 @@ interface ReagentLayoutProps {
 
 export default function ReagentLayout({ children }: ReagentLayoutProps) {
   return (
-    <div className="w-full h-full">
+    <div className="flex flex-col w-full h-full">
       <div className="flex h-12 p-2 items-center gap-4 bg-black">
         <Breadcrumb>
           <BreadcrumbList>

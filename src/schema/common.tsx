@@ -1,8 +1,14 @@
-interface pageDataSchema<T> {
+interface PageDataSchema<T> {
   page: number;
   size: number;
   total: number;
   items: T[];
 }
 
-export type { pageDataSchema };
+interface ApiResponseSchema<T> {
+  code: number;
+  message: string;
+  data: T;
+}
+
+export type { PageDataSchema, ApiResponseSchema };

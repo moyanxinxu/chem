@@ -1,6 +1,15 @@
 interface createReagentSchema {
   chemLab: string;
   chemName: string;
+  chemCas: string;
+  place: string;
+  stock: number;
+  cabinet: string;
+  unit: string;
+  producer: string;
+  mfgDate: string;
+  msdsUrl: string;
+  other: string;
   reagentNum: number;
 }
 
@@ -24,6 +33,7 @@ interface getReagentsResponseSchema {
   place: string;
   cabinet: string;
 
+  mfgDate: string;
   msdsUrl: string;
   other: string;
 }

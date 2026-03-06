@@ -30,19 +30,35 @@ const tableColumns = [
     key: "chemName",
   },
   {
+    title: "试剂柜",
+    dataIndex: "cabinet",
+    key: "cabinet",
+  },
+  {
+    title: "具体方位",
+    dataIndex: "place",
+    key: "place",
+  },
+
+  {
     title: "CAS",
     dataIndex: "chemCas",
     key: "chemCas",
   },
   {
-    title: "批号",
-    dataIndex: "batchNum",
-    key: "batchNum",
+    title: "数量",
+    dataIndex: "reagentNum",
+    key: "reagentNum",
   },
   {
-    title: "现有库存",
-    dataIndex: "existingStock",
-    key: "existingStock",
+    title: "试剂存量",
+    dataIndex: "stock",
+    key: "stock",
+  },
+  {
+    title: "计量单位",
+    dataIndex: "unit",
+    key: "unit",
   },
   {
     title: "生产厂商",
@@ -50,19 +66,9 @@ const tableColumns = [
     key: "producer",
   },
   {
-    title: "存放位置",
-    dataIndex: "place",
-    key: "place",
-  },
-  {
-    title: "试剂数量",
-    dataIndex: "reagentNum",
-    key: "reagentNum",
-  },
-  {
-    title: "操作",
-    dataIndex: "action",
-    key: "action",
+    title: "生产日期",
+    dataIndex: "mfgDate",
+    key: "mfgDate",
   },
 ];
 
@@ -95,7 +101,7 @@ export default function ReagentPage() {
         queryKey: ["getReagents", page, size],
       });
 
-      toast.success("删除试剂成功");
+      toast.success("删除试剂信息成功");
     },
   });
 
@@ -113,7 +119,10 @@ export default function ReagentPage() {
     <div className="w-full h-full p-2 bg-purple-50">
       <Table<getReagentsResponseSchema>
         bordered
-        dataSource={reagents?.items.map((item) => ({ ...item, key: item.id }))}
+        dataSource={reagents?.items.map((item) => ({
+          ...item,
+          key: item.id,
+        }))}
         pagination={{
           total: reagents?.total,
           current: reagents?.page,

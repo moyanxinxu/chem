@@ -1,5 +1,5 @@
-import { fetch } from "@/api/common";
-import { pageDataSchema } from "@/schema/common";
+import { fetch } from "@mcitem/tauri-plugin-axum/fetch";
+import { PageDataSchema } from "@/schema/common";
 import {
   createReagentSchema,
   getReagentsResponseSchema,
@@ -27,7 +27,7 @@ const addReagent = async (data: createReagentSchema) => {
 
 const getReagents = async (
   query: getReagentsSchema,
-): Promise<pageDataSchema<getReagentsResponseSchema>> => {
+): Promise<PageDataSchema<getReagentsResponseSchema>> => {
   const url = reagent_url + "/base?" + `page=${query.page}&size=${query.size}`;
 
   const response = await fetch(url);
@@ -53,5 +53,6 @@ const deleteReagent = async (id: string) => {
   const apiResponse = await response.json();
   return apiResponse.data;
 };
+
 
 export { addReagent, getReagents, deleteReagent };

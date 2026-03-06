@@ -10,6 +10,7 @@ pub enum ApiError {
     #[error("Not Found")] NotFound,
     #[error("数据库异常: {0}")] Database(#[from] sea_orm::DbErr),
     #[error("{0}")] Biz(String),
+    #[error("{0}")] Request(#[from] reqwest::Error),
     #[error("错误: {0}")] Internal(#[from] anyhow::Error),
 }
 
@@ -19,6 +20,7 @@ impl ApiError {
             ApiError::NotFound => StatusCode::NOT_FOUND,
             ApiError::Biz(_) => StatusCode::OK,
             ApiError::Internal(_) | ApiError::Database(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            ApiError::Request(_) => StatusCode::BAD_REQUEST,
         }
     }
 }
