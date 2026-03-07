@@ -28,7 +28,7 @@ import {
   ReagentSchema,
 } from "@/schema/reagent.schema";
 import { PageSchema, LabelValueSchema } from "@/schema/common";
-import { labs, units } from "@/constant/common";
+import { labs, units, producers } from "@/constant/common";
 import { useCommonStore } from "@/store/common.store";
 
 const AddReagentPopover = () => {
@@ -45,6 +45,11 @@ const AddReagentPopover = () => {
     mfgDate: "",
     msdsUrl: "",
     other: "",
+  });
+
+  const [labInfo, setLabInfo] = useState<(typeof labs)[0]>({
+    lab: "",
+    cabinets: [],
   });
 
   const handleChange = (key: keyof ReagentSchema, value: string) => {
@@ -181,6 +186,25 @@ const AddReagentPopover = () => {
     </>
   );
 
+  const handleChangeChemLab = (chemLab: string) => {
+    handleChange("chemLab", chemLab);
+    const labItem = labs.find((item) => item.lab === chemLab);
+
+    setLabInfo(labItem ?? { lab: "", cabinets: [] });
+  };
+
+  const getPlacesByCabinet = () => {
+    const cabinetInfo =
+      labInfo.cabinets.find((item) => item.name === chem.cabinet)?.places ?? [];
+    return getLsAllCases(cabinetInfo);
+  };
+
+  const getProducersOptions = () => {
+    const options = producers.filter((item) => item.startsWith(chem.producer));
+
+    return getLsAllCases(options) ?? [];
+  };
+
   return (
     <Form name="add-reagent-form" requiredMark={requiredTag}>
       <Divider />
@@ -188,22 +212,24 @@ const AddReagentPopover = () => {
       <Form.Item required label="实验室">
         <Select
           value={chem.chemLab}
-          onChange={(item) => handleChange("chemLab", item)}
-          options={getLsAllCases(labs)}
+          onChange={(chemLab) => handleChangeChemLab(chemLab)}
+          options={getLsAllCases(labs.map((item) => item.lab))}
         />
       </Form.Item>
 
       <Form.Item required label="试剂柜">
-        <Input
+        <AutoComplete
           value={chem.cabinet}
-          onChange={(e) => handleChange("cabinet", e.target.value)}
+          onChange={(cabinet) => handleChange("cabinet", cabinet)}
+          options={getLsAllCases(labInfo.cabinets.map((item) => item.name))}
         />
       </Form.Item>
 
       <Form.Item label="具体方位">
-        <Input
+        <AutoComplete
           value={chem.place}
-          onChange={(e) => handleChange("place", e.target.value)}
+          onChange={(place) => handleChange("place", place)}
+          options={getPlacesByCabinet()}
         />
       </Form.Item>
 
@@ -265,13 +291,20 @@ const AddReagentPopover = () => {
       </Form.Item>
 
       <Form.Item label="生产厂商">
-        <Input
+        <AutoComplete
           value={chem.producer}
-          onChange={(e) => handleChange("producer", e.target.value)}
+          onChange={(procuder) => handleChange("producer", procuder)}
+          options={getProducersOptions()}
         />
       </Form.Item>
 
       <Form.Item label="生产日期">
+        <DatePicker
+          onChange={(_, dataString) => handleChangeMfgDate(dataString)}
+        />
+      </Form.Item>
+
+      <Form.Item label="入库时间">
         <DatePicker
           onChange={(_, dataString) => handleChangeMfgDate(dataString)}
         />
