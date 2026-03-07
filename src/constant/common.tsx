@@ -1,3 +1,5 @@
+const msdsDownloadPrefix = "https://whpdj.mem.gov.cn";
+
 const appLinks = [
   { idx: 1, title: "首页", href: "/" },
   { idx: 2, title: "试剂管理", href: "/reagent" },
@@ -119,4 +121,12 @@ const producers = [
   "自制",
 ];
 
-export { apps, appLinks, labs, producers, reagentTableColumns, units };
+export {
+  apps,
+  appLinks,
+  labs,
+  msdsDownloadPrefix,
+  producers,
+  reagentTableColumns,
+  units,
+};

@@ -90,6 +90,7 @@ export default function ReagentPage() {
     <div className="w-full h-full p-2 bg-purple-50">
       <Table<GetReagentsResponseSchema>
         bordered
+        size="small"
         dataSource={reagents?.items}
         pagination={{
           total: reagents?.total,

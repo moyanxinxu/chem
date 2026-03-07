@@ -18,6 +18,8 @@ import {
   CheckOutlined,
   CloseOutlined,
   CloudUploadOutlined,
+  CopyOutlined,
+  FilePdfOutlined,
 } from "@ant-design/icons";
 
 import { addReagent as _addReagent } from "@/api/reagent.api";
@@ -28,8 +30,9 @@ import {
   ReagentSchema,
 } from "@/schema/reagent.schema";
 import { PageSchema, LabelValueSchema } from "@/schema/common";
-import { labs, units, producers } from "@/constant/common";
+import { labs, units, producers, msdsDownloadPrefix } from "@/constant/common";
 import { useCommonStore } from "@/store/common.store";
+import { useRouter } from "next/navigation";
 
 const AddReagentPopover = () => {
   const [chem, setChem] = useState<ReagentSchema>({
@@ -56,11 +59,12 @@ const AddReagentPopover = () => {
     setChem((prev) => ({ ...prev, [key]: value }));
   };
 
-  const [options, setOptions] = useState<LabelValueSchema[]>([]);
+  const [chemAliasOptions, setAliasOptions] = useState<LabelValueSchema[]>([]);
   const [casValid, setCasValid] = useState<boolean>(false);
 
   const { page, size, setPage } = useCommonStore();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const canAddChem =
     !!chem.chemName && !!chem.chemLab && !!chem.reagentNum && !!chem.stock;
@@ -77,9 +81,9 @@ const AddReagentPopover = () => {
         const options = getLsAllCases(record.chemAlias.split(";"));
 
         handleChange("chemName", record.chemName);
-        handleChange("msdsUrl", record.safetyFileId);
+        handleChange("msdsUrl", msdsDownloadPrefix + record.safetyFileUrl);
 
-        setOptions([
+        setAliasOptions([
           { label: record.chemName, value: record.chemName },
           ...options,
         ]);
@@ -150,8 +154,11 @@ const AddReagentPopover = () => {
     handleChange("mfgDate", "");
     handleChange("msdsUrl", "");
     handleChange("other", "");
+    handleChange("mfgDate", "");
 
     setCasValid(false);
+    setLabInfo({ lab: "", cabinets: [] });
+    setAliasOptions([]);
   };
 
   const { mutate: handleChangeChemCas } = useMutation({
@@ -252,17 +259,30 @@ const AddReagentPopover = () => {
       </Form.Item>
 
       <Form.Item label="msds信息地址">
-        <Input
-          value={chem.msdsUrl}
-          onChange={(e) => handleChange("msdsUrl", e.target.value)}
-        />
+        <Space.Compact>
+          <Input
+            value={chem.msdsUrl}
+            onChange={(e) => handleChange("msdsUrl", e.target.value)}
+          />
+          <Button
+            icon={<CopyOutlined />}
+            disabled={chem.msdsUrl === ""}
+            onClick={() => navigator.clipboard.writeText(chem.msdsUrl)}
+          />
+
+          <Button
+            icon={<FilePdfOutlined style={{ color: "red" }} />}
+            disabled={chem.msdsUrl === ""}
+            onClick={() => router.push(chem.msdsUrl)}
+          />
+        </Space.Compact>
       </Form.Item>
 
       <Form.Item required label="试剂名称">
         <AutoComplete
           value={chem.chemName}
           onChange={(value) => handleChange("chemName", value)}
-          options={options}
+          options={chemAliasOptions}
         />
       </Form.Item>
 
