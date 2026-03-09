@@ -10,7 +10,7 @@ interface CommonStore {
 
 const useCommonStore = create<CommonStore>((set) => ({
   page: 1,
-  size: 6,
+  size: 20,
 
   setPage: (page: number) => set({ page }),
   setSize: (size: number) => set({ size }),

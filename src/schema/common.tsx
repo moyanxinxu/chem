@@ -30,6 +30,12 @@ interface QueryProviderProps {
   children: React.ReactNode;
 }
 
+type IconLinkProps = {
+  icon: React.ReactNode;
+  href: string;
+};
+
 export type { ApiResponseSchema, LabelValueSchema, PageSchema };
+export type { IconLinkProps };
 export type { RootLayoutProps, ReagentLayoutProps };
 export type { QueryProviderProps };

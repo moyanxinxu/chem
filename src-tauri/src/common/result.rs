@@ -1,5 +1,5 @@
 use axum::http::StatusCode;
-use axum::response::{ IntoResponse, Response };
+use axum::response::{IntoResponse, Response};
 
 use super::response::ApiResponse;
 
@@ -7,11 +7,16 @@ pub type ApiResult<T> = Result<T, ApiError>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum ApiError {
-    #[error("Not Found")] NotFound,
-    #[error("数据库异常: {0}")] Database(#[from] sea_orm::DbErr),
-    #[error("{0}")] Biz(String),
-    #[error("{0}")] Request(#[from] reqwest::Error),
-    #[error("错误: {0}")] Internal(#[from] anyhow::Error),
+    #[error("Not Found")]
+    NotFound,
+    #[error("数据库异常: {0}")]
+    Database(#[from] sea_orm::DbErr),
+    #[error("{0}")]
+    Biz(String),
+    #[error("{0}")]
+    Request(#[from] reqwest::Error),
+    #[error("错误: {0}")]
+    Internal(#[from] anyhow::Error),
 }
 
 impl ApiError {

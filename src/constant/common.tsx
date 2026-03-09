@@ -5,7 +5,7 @@ const appLinks = [
   { idx: 2, title: "试剂管理", href: "/reagent" },
 ];
 
-const apps = [{ title: "试剂管理", href: "/reagent" }];
+const apps = [{ title: "试剂管理", href: "/reagent", desc: "试剂台账" }];
 
 const reagentTableColumns = [
   { idx: 1, title: "实验室", dataIndex: "chemLab" },

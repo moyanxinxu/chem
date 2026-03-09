@@ -1,5 +1,5 @@
-use axum::response::{ IntoResponse, Response };
-use serde::{ Deserialize, Serialize };
+use axum::response::{IntoResponse, Response};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ApiResponse<T> {
@@ -11,7 +11,11 @@ pub struct ApiResponse<T> {
 
 impl<T> ApiResponse<T> {
     pub fn new(code: i32, message: String, data: Option<T>) -> Self {
-        Self { code, message, data }
+        Self {
+            code,
+            message,
+            data,
+        }
     }
 
     pub fn ok<M: AsRef<str>>(message: M, data: Option<T>) -> Self {

@@ -19,7 +19,9 @@ pub async fn get_app_state() -> AppState {
     let home_dir = dirs::home_dir().unwrap();
 
     let db_path = home_dir.join(".chem/chem.db");
-    let db = Database::connect("sqlite://".to_string() + db_path.to_str().unwrap()).await.unwrap();
+    let db = Database::connect("sqlite://".to_string() + db_path.to_str().unwrap())
+        .await
+        .unwrap();
 
     AppState::new(db)
 }

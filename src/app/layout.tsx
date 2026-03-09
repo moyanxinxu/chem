@@ -9,7 +9,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <StrictMode>
       <html lang="zh-CN">
-        <body className="h-screen w-screen flex">
+        <body className="h-screen w-screen flex flex-col">
           <QueryProvider>{children}</QueryProvider>
           <Toaster richColors position="top-center" />
         </body>

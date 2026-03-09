@@ -1,6 +1,6 @@
+use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 use std::str::FromStr;
-use serde::{ Deserialize, Serialize };
 
 #[derive(Deserialize)]
 #[serde(untagged)]
@@ -10,7 +10,10 @@ enum StringOrNumber<T> {
 }
 
 fn deserialize_number<'de, T, D>(deserializer: D) -> Result<T, D::Error>
-    where T: FromStr + Deserialize<'de>, T::Err: Display, D: serde::Deserializer<'de>
+where
+    T: FromStr + Deserialize<'de>,
+    T::Err: Display,
+    D: serde::Deserializer<'de>,
 {
     match StringOrNumber::deserialize(deserializer)? {
         StringOrNumber::String(s) => s.parse().map_err(serde::de::Error::custom),
@@ -23,7 +26,7 @@ fn default_page() -> u64 {
 }
 
 fn default_size() -> u64 {
-    return 6;
+    return 30;
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -45,7 +48,12 @@ pub struct Page<T> {
 
 impl<T> Page<T> {
     pub fn new(page: u64, size: u64, total: u64, items: Vec<T>) -> Self {
-        Self { page, size, total, items }
+        Self {
+            page,
+            size,
+            total,
+            items,
+        }
     }
 
     pub fn from_pagination(pagination: PaginationParams, total: u64, items: Vec<T>) -> Self {
