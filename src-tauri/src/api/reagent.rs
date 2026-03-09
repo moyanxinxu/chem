@@ -22,9 +22,9 @@ use crate::entity::reagents::{self, ActiveModel as ReagentActivateModel, Model};
 struct AddReagentBody {
     chem_lab: String,
     chem_name: String,
-    reagent_num: i64,
+    reagent_num: f64,
     chem_cas: Option<String>,
-    stock: i64,
+    stock: f64,
     producer: Option<String>,
 
     cabinet: Option<String>,
@@ -91,8 +91,8 @@ struct GetReagentResponse {
     chem_lab: String,
     chem_name: String,
     chem_cas: Option<String>,
-    reagent_num: i64,
-    stock: i64,
+    reagent_num: f64,
+    stock: f64,
     producer: Option<String>,
     place: Option<String>,
     cabinet: Option<String>,

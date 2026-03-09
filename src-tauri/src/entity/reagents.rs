@@ -3,7 +3,7 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "reagents")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
@@ -14,10 +14,12 @@ pub struct Model {
     pub chem_name: String,
     #[sea_orm(column_type = "Text", nullable)]
     pub chem_cas: Option<String>,
-    pub reagent_num: i64,
+    #[sea_orm(column_type = "Double")]
+    pub reagent_num: f64,
     #[sea_orm(column_type = "Text")]
     pub unit: String,
-    pub stock: i64,
+    #[sea_orm(column_type = "Double")]
+    pub stock: f64,
     #[sea_orm(column_type = "Text", nullable)]
     pub producer: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]

@@ -33,7 +33,7 @@ const units = ["ml", "L", "g", "kg"];
 
 const labs = [
   {
-    lab: "214试剂仓库",
+    lab: "214",
     cabinets: [
       { name: "111号试剂柜", places: ["试剂柜上层", "试剂柜下层"] },
       { name: "114号试剂柜", places: ["试剂柜上层", "试剂柜下层"] },
@@ -51,13 +51,13 @@ const labs = [
       { name: "314-2号试剂柜", places: ["上层", "下层-1", "下层-2"] },
     ],
   },
-  { lab: "110实验室自留", cabinets: [] },
-  { lab: "111实验室自留", cabinets: [] },
-  { lab: "119实验室自留", cabinets: [] },
-  { lab: "210实验室自留", cabinets: [] },
-  { lab: "221实验室自留", cabinets: [] },
-  { lab: "223实验室自留", cabinets: [] },
-  { lab: "225实验室自留", cabinets: [] },
+  { lab: "110", cabinets: [] },
+  { lab: "111", cabinets: [] },
+  { lab: "119", cabinets: [] },
+  { lab: "210", cabinets: [] },
+  { lab: "221", cabinets: [] },
+  { lab: "223", cabinets: [] },
+  { lab: "225", cabinets: [] },
 ];
 
 const producers = [

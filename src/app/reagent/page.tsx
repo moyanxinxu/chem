@@ -121,21 +121,20 @@ export default function ReagentPage() {
           </Button>
         </Space>
 
-        <Pagination />
+        <Pagination
+          total={reagents?.total}
+          current={reagents?.page}
+          pageSize={reagents?.size}
+          onChange={(page, _) => setPage(page || 1)}
+        />
       </div>
 
       <Table<GetReagentsResponseSchema>
         bordered
         size="small"
         dataSource={reagents?.items}
-        pagination={{
-          total: reagents?.total,
-          current: reagents?.page,
-          pageSize: reagents?.size,
-          placement: ["none", "none"],
-        }}
+        pagination={false}
         rowSelection={rowSelectionPros}
-        onChange={(pagination) => setPage(pagination.current || 1)}
       >
         {reagentTableColumns.map((col) => (
           <Table.Column key={col.dataIndex} {...col} />
