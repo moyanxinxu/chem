@@ -31,6 +31,11 @@ interface CreateReagentSchema {
 interface GetReagentsSchema {
   page: number;
   size: number;
+  chemLab: string;
+  chemName: string;
+  chemCas: string;
+  cabinet: string;
+  place: string;
 }
 
 class DeleteReagentSchema {

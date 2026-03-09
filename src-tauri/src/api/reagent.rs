@@ -5,6 +5,7 @@ use axum::routing::{delete, get, post, put};
 use serde::{Deserialize, Serialize};
 
 use sea_orm::entity::prelude::*;
+use sea_orm::query::*;
 use sea_orm::{ActiveValue, FromQueryResult};
 
 use crate::common::page::{Page, PaginationParams};
@@ -75,6 +76,11 @@ async fn add_reagent(
 struct GetReagentQuery {
     #[serde(flatten)]
     pagination: PaginationParams,
+    chem_lab: Option<String>,
+    chem_cas: Option<String>,
+    chem_name: Option<String>,
+    cabinet: Option<String>,
+    place: Option<String>,
 }
 
 #[derive(Debug, Serialize, DerivePartialModel, FromQueryResult)]
@@ -98,12 +104,42 @@ struct GetReagentResponse {
 
 async fn get_reagent(
     State(AppState { db }): State<AppState>,
-    Query(GetReagentQuery { pagination }): Query<GetReagentQuery>,
+    Query(GetReagentQuery {
+        pagination,
+        chem_lab,
+        chem_cas,
+        chem_name,
+        cabinet,
+        place,
+    }): Query<GetReagentQuery>,
 ) -> ApiResult<ApiResponse<Page<GetReagentResponse>>> {
+    let mut condition = Condition::all().add(reagents::Column::Status.eq(1));
+
+    if let Some(chem_lab) = chem_lab.filter(|s| !s.is_empty()) {
+        condition = condition.add(reagents::Column::ChemLab.eq(chem_lab));
+    }
+
+    if let Some(chem_cas) = chem_cas.filter(|s| !s.is_empty()) {
+        condition = condition.add(reagents::Column::ChemCas.like(format!("%{}%", chem_cas)));
+    }
+
+    if let Some(chem_name) = chem_name.filter(|s| !s.is_empty()) {
+        condition = condition.add(reagents::Column::ChemName.like(format!("%{}%", chem_name)));
+    }
+
+    if let Some(cabinet) = cabinet.filter(|s| !s.is_empty()) {
+        condition = condition.add(reagents::Column::Cabinet.eq(cabinet));
+    }
+
+    if let Some(place) = place.filter(|s| !s.is_empty()) {
+        condition = condition.add(reagents::Column::Place.eq(place));
+    }
+
     let paginator = Reagents::find()
-        .filter(reagents::Column::Status.eq(1))
+        .filter(condition)
         .into_partial_model::<GetReagentResponse>()
         .paginate(&db, pagination.size);
+
     let total = paginator.num_items().await?;
 
     match paginator.fetch_page(pagination.page - 1).await {

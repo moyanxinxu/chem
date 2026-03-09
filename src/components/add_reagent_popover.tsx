@@ -31,7 +31,7 @@ import {
 } from "@/schema/reagent.schema";
 import { PageSchema, LabelValueSchema } from "@/schema/common";
 import { labs, units, producers, msdsDownloadPrefix } from "@/constant/common";
-import { useCommonStore } from "@/store/common.store";
+import { useCommonStore } from "@/stores/common.store";
 import { useRouter } from "next/navigation";
 
 const AddReagentPopover = () => {
@@ -78,15 +78,15 @@ const AddReagentPopover = () => {
       if (records.length !== 0) {
         const record = records[0];
 
-        const options = getLsAllCases(record.chemAlias.split(";"));
+        const chemAlias = [record.chemName, record.chemAlias]
+          .filter(Boolean)
+          .join(";")
+          .split(";");
 
         handleChange("chemName", record.chemName);
         handleChange("msdsUrl", msdsDownloadPrefix + record.safetyFileUrl);
 
-        setAliasOptions([
-          { label: record.chemName, value: record.chemName },
-          ...options,
-        ]);
+        setAliasOptions(getLsAllCases(chemAlias));
 
         toast.success(
           "获取化学品名称" + record.chemName + "(" + chem.chemCas + ")",
@@ -324,11 +324,11 @@ const AddReagentPopover = () => {
         />
       </Form.Item>
 
-      <Form.Item label="入库时间">
+      {/*<Form.Item label="入库时间">
         <DatePicker
           onChange={(_, dataString) => handleChangeMfgDate(dataString)}
         />
-      </Form.Item>
+      </Form.Item>*/}
 
       <Form.Item className="flex items-center justify-center">
         <Space.Compact>
