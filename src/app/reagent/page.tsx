@@ -13,7 +13,11 @@ import {
   Typography,
 } from "antd";
 
-import { PlusCircleOutlined, ReloadOutlined } from "@ant-design/icons";
+import {
+  MoreOutlined,
+  PlusCircleOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -163,7 +167,7 @@ export default function ReagentPage() {
           <FloatButton icon={<PlusCircleOutlined />} />
         </Popover>
 
-        <FloatButton.BackTop visibilityHeight={0} />
+        <FloatButton icon={<MoreOutlined />} />
       </FloatButton.Group>
     </div>
   );

@@ -22,8 +22,20 @@ interface ReagentLayoutProps {
   children: React.ReactNode;
 }
 
+interface ChatGptLayoutProps {
+  children: React.ReactNode;
+}
+
 interface RootLayoutProps {
   children: React.ReactNode;
+}
+
+interface AuthLayoutProps {
+  children: React.ReactNode;
+}
+
+interface HeaderPorps {
+  lchild?: React.ReactNode;
 }
 
 interface QueryProviderProps {
@@ -37,5 +49,11 @@ type IconLinkProps = {
 
 export type { ApiResponseSchema, LabelValueSchema, PageSchema };
 export type { IconLinkProps };
-export type { RootLayoutProps, ReagentLayoutProps };
+export type {
+  AuthLayoutProps,
+  RootLayoutProps,
+  ChatGptLayoutProps,
+  ReagentLayoutProps,
+  HeaderPorps,
+};
 export type { QueryProviderProps };

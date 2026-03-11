@@ -1,6 +1,7 @@
 enum ApiUrl {
   ReagentUrl = "/api/reagent",
   MsdsUrl = "/api/msds",
+  AuthUrl = "/api/auth",
 }
 
 enum Method {
@@ -50,10 +51,15 @@ class UrlBuilder {
     return this;
   }
 
-  path(Parmas: Record<string, unknown> | object): UrlBuilder {
-    for (const [key, value] of Object.entries(Parmas)) {
+  path(parmas: Record<string, unknown> | object): UrlBuilder {
+    for (const [key, value] of Object.entries(parmas)) {
       this.url = this.url.replace(`{${key}}`, String(value));
     }
+    return this;
+  }
+
+  endpint(endpint: string): UrlBuilder {
+    this.url += endpint;
     return this;
   }
 

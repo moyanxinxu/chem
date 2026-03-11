@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { Toaster } from "sonner";
 
-import { QueryProvider } from "@/components/provider";
+import { QueryProvider } from "@/components/provider/query_provider";
 import { RootLayoutProps } from "@/schema/common";
 import "./globals.css";
 

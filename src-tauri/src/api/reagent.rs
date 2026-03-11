@@ -15,7 +15,8 @@ use crate::common::result::ApiResult;
 use crate::common::state::AppState;
 
 use crate::entity::prelude::Reagents;
-use crate::entity::reagents::{self, ActiveModel as ReagentActivateModel, Model};
+use crate::entity::reagents;
+use crate::entity::reagents::{ActiveModel as ReagentActivateModel, Model as ReagentModel};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -39,7 +40,7 @@ struct AddReagentBody {
 async fn add_reagent(
     State(AppState { db }): State<AppState>,
     Json(body): Json<AddReagentBody>,
-) -> ApiResult<ApiResponse<Model>> {
+) -> ApiResult<ApiResponse<ReagentModel>> {
     let id = xid::new().to_string();
     let reagent = ReagentActivateModel {
         id: ActiveValue::set(id.clone()),
@@ -154,7 +155,7 @@ async fn get_reagent(
 async fn delete_reagent(
     State(AppState { db }): State<AppState>,
     Path(id): Path<String>,
-) -> ApiResult<ApiResponse<Model>> {
+) -> ApiResult<ApiResponse<ReagentModel>> {
     let reagent = Reagents::find_by_id(id).one(&db).await.unwrap();
 
     if let Some(reagent) = reagent {

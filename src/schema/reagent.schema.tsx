@@ -66,6 +66,15 @@ interface GetReagentsResponseSchema {
   other: string;
 }
 
+interface UploadFileModalProps {
+  title: string;
+  open: boolean;
+  onOk: () => void;
+  onCancle: () => void;
+}
+
+export type { UploadFileModalProps };
+
 export type {
   CreateReagentSchema,
   ReagentSchema,

@@ -5,6 +5,8 @@ import { Card, Col, Row } from "antd";
 import { ArrowRightFromLine } from "lucide-react";
 import { IconLinkProps } from "@/schema/common";
 
+import { Header } from "@/components/header/header";
+
 const IconLink = ({ icon, href }: IconLinkProps) => {
   return <Link href={href}>{icon}</Link>;
 };
@@ -12,8 +14,7 @@ const IconLink = ({ icon, href }: IconLinkProps) => {
 export default function Home() {
   return (
     <div className="flex flex-col flex-1">
-      <div className="h-12 p-2 flex items-center gap-4 bg-black"></div>
-
+      <Header />
       <div className="flex-1 bg-purple-50 p-4">
         <Row gutter={16}>
           {apps.map((app) => (

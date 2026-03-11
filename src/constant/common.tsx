@@ -121,6 +121,11 @@ const producers = [
   "自制",
 ];
 
+enum AuthPageUrl {
+  Login = "/login",
+  SignIn = "/signin",
+}
+
 export {
   apps,
   appLinks,
@@ -130,3 +135,5 @@ export {
   reagentTableColumns,
   units,
 };
+
+export { AuthPageUrl };

@@ -14,12 +14,9 @@ import { ChemInfoSchema } from "@/schema/msds.schema";
 
 const msdsUrl = ApiUrl.MsdsUrl;
 
-enum MsdsUrl {
-  ChemInfo = msdsUrl + "/chem",
-}
-
 const getChemInfo = async (chemCas: string) => {
-  const url = new UrlBuilder(MsdsUrl.ChemInfo).build();
+  const url = new UrlBuilder(msdsUrl).endpint("/chem").build();
+  
 
   const method = Method.POST;
   const body = new ApiBody({ chemCas }).toJson();

@@ -1,8 +1,14 @@
+mod auth;
 mod msds;
 mod reagent;
+mod user;
 
+use crate::api::auth::create_auth_router;
 use crate::api::msds::create_msds_router;
 use crate::api::reagent::create_reagent_router;
+use crate::api::user::create_user_router;
+
+use crate::common::middleware::get_auth_layer;
 use crate::common::result::{ApiError, ApiResult};
 use crate::common::state::AppState;
 
@@ -21,10 +27,9 @@ pub fn create_overall_router() -> Router<AppState> {
         Router::new()
             .nest("/reagent", create_reagent_router())
             .nest("/msds", create_msds_router())
-            // .nest("/missions", create_mission_router())
-            // .nest("/logs", create_logs_router())
-            // .nest("/events", create_event_router())
-            // .nest("/incidents", create_incident_router())
+            .nest("/users", create_user_router())
+            .route_layer(get_auth_layer())
+            .nest("/auth", create_auth_router())
             .fallback(async || -> ApiResult<()> { Err(ApiError::NotFound) })
             .layer(cors),
     )

@@ -19,14 +19,8 @@ import {
 
 const reagentUrl = ApiUrl.ReagentUrl;
 
-enum ReagentUrl {
-  AddReagent = reagentUrl + "/base",
-  GetReagents = reagentUrl + "/base", // ?page={page}&size={size}
-  DeleteReagent = reagentUrl + "/base/{id}",
-}
-
 const addReagent = async (data: ReagentSchema) => {
-  const url = new UrlBuilder(ReagentUrl.AddReagent).build();
+  const url = new UrlBuilder(reagentUrl).endpint("/base").build();
   const method = Method.POST;
 
   const body = new ApiBody({
@@ -51,7 +45,7 @@ const addReagent = async (data: ReagentSchema) => {
 };
 
 const getReagents = async (query: GetReagentsSchema) => {
-  const url = new UrlBuilder(ReagentUrl.GetReagents).query(query).build();
+  const url = new UrlBuilder(reagentUrl).endpint("/base").query(query).build();
 
   const response = await fetch(url);
 
@@ -67,7 +61,10 @@ const getReagents = async (query: GetReagentsSchema) => {
 };
 
 const deleteReagent = async (query: DeleteReagentSchema) => {
-  const url = new UrlBuilder(ReagentUrl.DeleteReagent).path(query).build();
+  const url = new UrlBuilder(reagentUrl)
+    .endpint("/base/{id}")
+    .path(query)
+    .build();
 
   const method = Method.DELETE;
 
